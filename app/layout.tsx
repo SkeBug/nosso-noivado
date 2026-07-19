@@ -23,18 +23,20 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const title = "Infinito Amor — Emanuela & Evandro";
-const description = "Convite de noivado de Emanuela Xavier & Evandro Silva";
+const title = "Noivado — Emanuela & Evandro";
+const description =
+  "Venha celebrar connosco o noivado de Emanuela & Evandro, dia 22 de Agosto de 2026, em Luanda. Confirme a sua presença e reveja todos os detalhes.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://nosso-noivado-two.vercel.app",
   ),
   title,
   description,
   openGraph: {
     title,
     description,
+    siteName: "Emanuela & Evandro — Noivado",
     images: [
       {
         url: "/images/og-image.jpg",
