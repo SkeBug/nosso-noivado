@@ -1,0 +1,36 @@
+# --- Dependencies ---
+/node_modules
+/.pnp
+.pnp.js
+
+# --- Next.js build output ---
+/.next/
+/out/
+/build
+
+# --- Env files (CRITICAL — your real Drive API key lives here) ---
+.env
+.env*.local
+
+# --- Vercel ---
+.vercel
+
+# --- TypeScript ---
+*.tsbuildinfo
+
+# --- Debug / logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- Editor ---
+.vscode/*
+!.vscode/extensions.json
+
+# --- Claude Code local settings (machine-specific, not shared) ---
+.claude/settings.local.json
