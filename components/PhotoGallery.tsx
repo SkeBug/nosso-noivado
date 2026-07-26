@@ -29,6 +29,30 @@ function samplePhotoSrc(sampleId: string, size: number) {
   return `https://picsum.photos/seed/${sampleId}/${size}/${size}`;
 }
 
+// Explicit gallery states for QA/demo, reachable via ?preview=<value> — each one
+// renders deterministically regardless of what's actually in the Drive folder:
+//   ?preview=1           → auto (current default: real photos if any, else sample photos)
+//   ?preview=fotos        → always the populated grid with sample photos
+//   ?preview=vazio         → the "no photos yet" empty state
+//   ?preview=carregando   → the loading skeleton, indefinitely
+//   ?preview=erro          → the "couldn't load photos" error state
+type ForcedGalleryState = "fotos" | "vazio" | "carregando" | "erro";
+
+function resolveForcedState(previewMode: string | null): ForcedGalleryState | null {
+  if (
+    previewMode === "fotos" ||
+    previewMode === "vazio" ||
+    previewMode === "carregando" ||
+    previewMode === "erro"
+  ) {
+    return previewMode;
+  }
+  return null;
+}
+
+const SIMULATED_ERROR_MESSAGE =
+  "Não foi possível carregar as fotos agora. Tenta novamente mais tarde.";
+
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -41,7 +65,8 @@ function SkeletonGrid() {
 
 export default function PhotoGallery() {
   const { photoGallery } = eventConfig;
-  const { timeLeft, isComplete, isPreview } = useCountdown();
+  const { timeLeft, isComplete, isPreview, previewMode } = useCountdown();
+  const forcedState = resolveForcedState(previewMode);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_DRIVE_API_KEY;
   const isConfigured = Boolean(apiKey) && photoGallery.driveFolderId !== "TODO";
 
@@ -82,11 +107,35 @@ export default function PhotoGallery() {
     };
   }, [isConfigured, isComplete, apiKey, photoGallery.driveFolderId]);
 
-  // Only fall back to sample photos once we know the real folder is genuinely
-  // empty (or errored) — a real, populated folder always takes priority.
-  const usingSamplePhotos = isPreview && (Boolean(error) || files?.length === 0);
-  const displayFiles = usingSamplePhotos ? SAMPLE_PHOTOS : files;
-  const displayError = usingSamplePhotos ? null : error;
+  // A forced state (?preview=fotos/vazio/carregando/erro) always wins and is fully
+  // deterministic. Otherwise ?preview=1 (or any other value) falls back to the
+  // "auto" behavior: real photos if any, else sample photos — only once we know
+  // the real folder is genuinely empty (or errored); a populated folder always
+  // takes priority.
+  const usingSampleFallback =
+    isPreview && !forcedState && (Boolean(error) || files?.length === 0);
+  const usingSamplePhotos = forcedState === "fotos" || usingSampleFallback;
+
+  let displayFiles: DriveFile[] | null;
+  let displayError: string | null;
+
+  if (forcedState === "vazio") {
+    displayFiles = [];
+    displayError = null;
+  } else if (forcedState === "carregando") {
+    displayFiles = null;
+    displayError = null;
+  } else if (forcedState === "erro") {
+    displayFiles = null;
+    displayError = SIMULATED_ERROR_MESSAGE;
+  } else if (usingSamplePhotos) {
+    displayFiles = SAMPLE_PHOTOS;
+    displayError = null;
+  } else {
+    displayFiles = files;
+    displayError = error;
+  }
+
   const displaySrc = usingSamplePhotos ? samplePhotoSrc : photoSrc;
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
@@ -132,12 +181,6 @@ export default function PhotoGallery() {
           <h2 className="mt-6 font-display text-3xl italic text-foreground sm:text-4xl">
             Galeria de Fotos
           </h2>
-
-          {usingSamplePhotos && (
-            <p className="mx-auto mt-3 inline-block rounded-full border border-gold/50 px-3 py-1 font-sans text-[11px] uppercase tracking-[0.2em] text-gold">
-              Pré-visualização — fotos de exemplo
-            </p>
-          )}
 
           {!isComplete ? (
             <>
