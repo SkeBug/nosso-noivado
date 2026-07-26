@@ -54,24 +54,29 @@ export default function MusicPlayer({ hasAudio }: Readonly<MusicPlayerProps>) {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Browsers block unmuted autoplay until the guest has interacted with the
+    // page. Try immediately (works in some contexts, e.g. a browser profile
+    // with enough prior engagement on this site), and otherwise keep retrying
+    // on every tap/scroll/keypress anywhere on the page until one succeeds —
+    // not just once per event type, since a single early attempt can fail for
+    // transient reasons (audio not buffered yet) while a later one succeeds.
     const attemptPlay = () => {
-      audio.play().catch(() => {});
+      audio.play().then(removeListeners, () => {});
     };
 
-    // Browsers block unmuted autoplay until the guest has interacted with the
-    // page. Try immediately (works in some contexts), and otherwise start on
-    // the very first tap/scroll/keypress anywhere on the page.
-    attemptPlay();
-
-    FIRST_INTERACTION_EVENTS.forEach((eventName) =>
-      document.addEventListener(eventName, attemptPlay, { once: true, passive: true }),
-    );
-
-    return () => {
+    function removeListeners() {
       FIRST_INTERACTION_EVENTS.forEach((eventName) =>
         document.removeEventListener(eventName, attemptPlay),
       );
-    };
+    }
+
+    attemptPlay();
+
+    FIRST_INTERACTION_EVENTS.forEach((eventName) =>
+      document.addEventListener(eventName, attemptPlay, { passive: true }),
+    );
+
+    return removeListeners;
   }, [hasAudio]);
 
   if (!hasAudio) return null;
