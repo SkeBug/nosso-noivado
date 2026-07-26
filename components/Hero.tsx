@@ -59,7 +59,11 @@ export default function Hero({
 
       <FadeIn delay={0.3} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
         <h1 className="mt-8 font-script text-5xl text-background sm:text-6xl md:text-7xl lg:text-8xl">
-          {firstNameA} &amp; {firstNameB}
+          {firstNameA}{" "}
+          <span className="font-display align-middle text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+            &amp;
+          </span>{" "}
+          {firstNameB}
         </h1>
       </FadeIn>
 
