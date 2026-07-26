@@ -20,13 +20,26 @@ function getTimeLeft(target: number): TimeLeft {
   };
 }
 
+// Visit any page with ?preview=1 to see the "day has arrived" state (countdown
+// complete, photo gallery unlocked) without waiting for the real date.
+function isPreviewRequested() {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("preview") === "1";
+}
+
 export function useCountdown() {
   const target = new Date(eventConfig.date.iso).getTime();
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [isComplete, setIsComplete] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
 
   useEffect(() => {
     const tick = () => {
+      if (isPreviewRequested()) {
+        setIsPreview(true);
+        setIsComplete(true);
+        return;
+      }
       if (Date.now() >= target) {
         setIsComplete(true);
         return;
@@ -39,5 +52,5 @@ export function useCountdown() {
     return () => clearInterval(interval);
   }, [target]);
 
-  return { timeLeft, isComplete };
+  return { timeLeft, isComplete, isPreview };
 }

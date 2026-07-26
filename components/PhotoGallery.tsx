@@ -17,6 +17,18 @@ function photoSrc(fileId: string, size: number) {
   return `/api/photo?id=${encodeURIComponent(fileId)}&size=${size}`;
 }
 
+// Stand-in photos for ?preview=1 when the real Drive folder has nothing in it yet
+// (expected before the event) — lets the couple see the finished gallery layout
+// and lightbox now instead of waiting for guest uploads.
+const SAMPLE_PHOTOS: DriveFile[] = Array.from({ length: 8 }, (_, index) => ({
+  id: `preview-${index + 1}`,
+  name: `Foto de exemplo ${index + 1}`,
+}));
+
+function samplePhotoSrc(sampleId: string, size: number) {
+  return `https://picsum.photos/seed/${sampleId}/${size}/${size}`;
+}
+
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -29,7 +41,7 @@ function SkeletonGrid() {
 
 export default function PhotoGallery() {
   const { photoGallery } = eventConfig;
-  const { timeLeft, isComplete } = useCountdown();
+  const { timeLeft, isComplete, isPreview } = useCountdown();
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_DRIVE_API_KEY;
   const isConfigured = Boolean(apiKey) && photoGallery.driveFolderId !== "TODO";
 
@@ -70,21 +82,28 @@ export default function PhotoGallery() {
     };
   }, [isConfigured, isComplete, apiKey, photoGallery.driveFolderId]);
 
+  // Only fall back to sample photos once we know the real folder is genuinely
+  // empty (or errored) — a real, populated folder always takes priority.
+  const usingSamplePhotos = isPreview && (Boolean(error) || files?.length === 0);
+  const displayFiles = usingSamplePhotos ? SAMPLE_PHOTOS : files;
+  const displayError = usingSamplePhotos ? null : error;
+  const displaySrc = usingSamplePhotos ? samplePhotoSrc : photoSrc;
+
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
   const showPrev = useCallback(() => {
     setLightboxIndex((current) => {
-      if (current === null || !files || files.length === 0) return current;
-      return (current - 1 + files.length) % files.length;
+      if (current === null || !displayFiles || displayFiles.length === 0) return current;
+      return (current - 1 + displayFiles.length) % displayFiles.length;
     });
-  }, [files]);
+  }, [displayFiles]);
 
   const showNext = useCallback(() => {
     setLightboxIndex((current) => {
-      if (current === null || !files || files.length === 0) return current;
-      return (current + 1) % files.length;
+      if (current === null || !displayFiles || displayFiles.length === 0) return current;
+      return (current + 1) % displayFiles.length;
     });
-  }, [files]);
+  }, [displayFiles]);
 
   useEffect(() => {
     if (lightboxIndex === null) return;
@@ -96,8 +115,9 @@ export default function PhotoGallery() {
   }, [lightboxIndex, closeLightbox]);
 
   const hasUploadUrl = photoGallery.driveFolderUploadUrl !== "TODO";
+
   const activePhoto =
-    lightboxIndex !== null && files ? files[lightboxIndex] : null;
+    lightboxIndex !== null && displayFiles ? displayFiles[lightboxIndex] : null;
 
   return (
     <section id="galeria-de-fotos" className="px-6 py-10">
@@ -112,6 +132,12 @@ export default function PhotoGallery() {
           <h2 className="mt-6 font-display text-3xl italic text-foreground sm:text-4xl">
             Galeria de Fotos
           </h2>
+
+          {usingSamplePhotos && (
+            <p className="mx-auto mt-3 inline-block rounded-full border border-gold/50 px-3 py-1 font-sans text-[11px] uppercase tracking-[0.2em] text-gold">
+              Pré-visualização — fotos de exemplo
+            </p>
+          )}
 
           {!isComplete ? (
             <>
@@ -132,19 +158,21 @@ export default function PhotoGallery() {
               </p>
 
               <div className="mt-8">
-                {error && <p className="font-sans text-sm text-foreground/70">{error}</p>}
+                {displayError && (
+                  <p className="font-sans text-sm text-foreground/70">{displayError}</p>
+                )}
 
-                {!error && files === null && <SkeletonGrid />}
+                {!displayError && displayFiles === null && <SkeletonGrid />}
 
-                {!error && files !== null && files.length === 0 && (
+                {!displayError && displayFiles !== null && displayFiles.length === 0 && (
                   <p className="font-sans text-sm text-foreground/70">
                     Ainda não há fotos — sê o primeiro a partilhar uma!
                   </p>
                 )}
 
-                {!error && files !== null && files.length > 0 && (
+                {!displayError && displayFiles !== null && displayFiles.length > 0 && (
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                    {files.map((file, index) => (
+                    {displayFiles.map((file, index) => (
                       <button
                         key={file.id}
                         type="button"
@@ -154,7 +182,7 @@ export default function PhotoGallery() {
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={photoSrc(file.id, 400)}
+                          src={displaySrc(file.id, 400)}
                           alt={file.name}
                           loading="lazy"
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -183,7 +211,7 @@ export default function PhotoGallery() {
 
       {activePhoto && (
         <PhotoLightbox
-          src={photoSrc(activePhoto.id, 1600)}
+          src={displaySrc(activePhoto.id, 1600)}
           alt={activePhoto.name}
           onClose={closeLightbox}
           onPrev={showPrev}
