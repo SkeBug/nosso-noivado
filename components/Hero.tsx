@@ -19,7 +19,9 @@ type HeroProps = {
 };
 
 export default function Hero({ guestName }: Readonly<HeroProps>) {
-  const { couple, date } = eventConfig;
+  const { couple, date, invitation } = eventConfig;
+  const firstNameA = couple.nameA.split(" ")[0];
+  const firstNameB = couple.nameB.split(" ")[0];
 
   return (
     <section className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
@@ -28,61 +30,62 @@ export default function Hero({ guestName }: Readonly<HeroProps>) {
           <KenBurns className="absolute inset-0">
             <Image
               src="/images/couple-cover.jpg"
-              alt={`${couple.nameA} & ${couple.nameB}`}
+              alt={`${firstNameA} & ${firstNameB}`}
               fill
               priority
               className="object-cover opacity-35"
             />
           </KenBurns>
-          <div className="absolute inset-0 bg-olive/45" />
+          <div className="absolute inset-0 bg-olive/60" />
         </div>
       )}
 
       <FadeIn spring className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-        {guestName ? (
-          <div>
-            <p className="font-sans text-xs uppercase tracking-[0.25em] text-foreground">
-              Convite especial para
-            </p>
-            <p className="mt-2 font-display text-3xl italic text-background sm:text-4xl md:text-5xl">
-              {guestName}
-            </p>
-          </div>
-        ) : (
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-background">
-            Você está convidado(a)
-          </p>
-        )}
+        <Monogram size={92} variant="white" priority className="mx-auto" />
       </FadeIn>
 
-      <FadeIn
-        delay={0.15}
-        spring
-        className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
-      >
-        <Monogram size={112} className="mx-auto mt-6 text-background" />
-      </FadeIn>
-
-      <FadeIn delay={0.3} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-        <p className="mt-6 font-script text-2xl text-background sm:text-4xl md:text-5xl lg:text-6xl">
-          {couple.nameA} &amp; {couple.nameB}
+      <FadeIn delay={0.15} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+        <p className="mx-auto mt-5 max-w-[20rem] font-display text-lg leading-relaxed text-background/95 sm:max-w-sm sm:text-xl">
+          {invitation.blessing}
         </p>
       </FadeIn>
 
-      <FadeIn delay={0.45}>
-        <h1 className="mt-4 font-display text-4xl italic text-foreground sm:text-5xl md:text-6xl">
-          Nossa Festa de Noivado
+      <FadeIn delay={0.3} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
+        <h1 className="mt-8 font-script text-5xl text-background sm:text-6xl md:text-7xl lg:text-8xl">
+          {firstNameA} &amp; {firstNameB}
         </h1>
       </FadeIn>
 
-      <FadeIn delay={0.6}>
+      <FadeIn delay={0.45} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+        <p className="mt-5 font-display text-lg text-background/95 sm:text-xl">
+          {invitation.honor}
+        </p>
+      </FadeIn>
+
+      <FadeIn delay={0.55}>
+        <div className="mx-auto mt-4 h-px w-12 bg-gold-light/70" aria-hidden="true" />
+      </FadeIn>
+
+      <FadeIn delay={0.65} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
+        <p className="mt-4 font-display text-3xl font-semibold text-background sm:text-4xl">
+          {guestName ?? invitation.genericGuestLabel}
+        </p>
+      </FadeIn>
+
+      <FadeIn delay={0.8} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+        <p className="mt-5 font-display text-lg text-background/95 sm:text-xl">
+          {invitation.celebration}
+        </p>
+      </FadeIn>
+
+      <FadeIn delay={0.95}>
         <p className="mt-6 font-sans text-sm tracking-wide text-foreground sm:text-base">
           {date.displayLabel}
         </p>
       </FadeIn>
 
       <FadeIn
-        delay={0.85}
+        delay={1.1}
         className="absolute bottom-10 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
       >
         <SmoothAnchor

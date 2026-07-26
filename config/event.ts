@@ -6,12 +6,18 @@ export const eventConfig = {
   },
   message:
     "Com o coração cheio de alegria, convidamos você a celebrar connosco o início de mais um capítulo da nossa história de amor.", // TODO: couple free to edit/replace this text
+  invitation: {
+    blessing: "Com o coração cheio de alegria e sob as bênçãos de Deus",
+    honor: "têm a honra de convidar",
+    celebration: "para celebrarem connosco o nosso noivado",
+    genericGuestLabel: "Convidado(a) Especial", // shown in place of a personalized guest name on the generic (non-slug) invite
+  },
   date: {
     iso: "2026-08-22T17:00:00-01:00", // Luanda, UTC-1
-    displayLabel: "22 de Agosto de 2026, às 17h",
+    displayLabel: "22 de agosto de 2026 | às 17h00", // matches the banner-sample formatting
   },
   location: {
-    name: "Salão de Festa Mwangana",
+    name: "Salão de Festas Mwanangana",
     address: "Urbanização Nova Vida - Rua 70, depois do Complexo Escolar Frei João Domingos",
     mapsUrl: "https://maps.app.goo.gl/W1YTAZn3iJA9JLs87",
   },
