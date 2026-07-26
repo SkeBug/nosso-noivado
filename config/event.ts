@@ -41,10 +41,10 @@ export const eventConfig = {
   guestManual: {
     arrivalTime: "same-as-event", // reuse eventConfig.date.displayLabel in the UI
     rules: [
-      "Confirme sua presença",
+      "Confirme sua presença clicando aqui",
       "Convidado não convida!",
       "Não se atrase. Seja pontual.",
-      "Tire muitas fotos e grave vídeos! Envie e veja todas as fotos do dia {albumLink}.", // {albumLink} interpolated with photoGallery.driveFolderUploadUrl
+      "Tire muitas fotos e grave vídeos! Envie e veja todas as fotos do dia {albumLink}", // {albumLink} interpolated with photoGallery.driveFolderUploadUrl
       "Não saia sem se despedir dos noivos!",
       "Aproveite bastante!",
     ],

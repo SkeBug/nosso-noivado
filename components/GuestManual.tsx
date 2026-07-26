@@ -7,6 +7,7 @@ import {
   Camera,
   Heart,
   PartyPopper,
+  ChevronRight,
 } from "lucide-react";
 import { eventConfig } from "@/config/event";
 import FadeIn from "./ui/FadeIn";
@@ -21,11 +22,20 @@ const ruleIcons: ReactNode[] = [
   <PartyPopper key="enjoy" size={18} />,
 ];
 
-const linkClassName = "underline decoration-gold underline-offset-2 hover:text-gold";
+const iconCircleClassName =
+  "mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold";
+
+const linkClassName =
+  "inline-flex items-center gap-1 font-semibold text-gold underline decoration-gold/40 underline-offset-4 transition-colors hover:decoration-gold";
 
 function renderRuleText(rule: string, index: number, albumUrl: string): ReactNode {
   if (index === 0) {
-    return <RsvpTriggerButton className={`text-left ${linkClassName}`}>{rule}</RsvpTriggerButton>;
+    return (
+      <RsvpTriggerButton className={`text-left ${linkClassName}`}>
+        {rule}
+        <ChevronRight size={16} className="shrink-0" aria-hidden="true" />
+      </RsvpTriggerButton>
+    );
   }
 
   if (!rule.includes("{albumLink}")) return rule;
@@ -39,6 +49,7 @@ function renderRuleText(rule: string, index: number, albumUrl: string): ReactNod
       {hasAlbum ? (
         <a href={albumUrl} target="_blank" rel="noopener noreferrer" className={linkClassName}>
           aqui
+          <ChevronRight size={14} className="shrink-0" aria-hidden="true" />
         </a>
       ) : (
         "aqui"
@@ -68,9 +79,7 @@ export default function GuestManual() {
           <ol className="mt-9 flex flex-col gap-6">
             {guestManual.rules.map((rule, index) => (
               <li key={rule} className="flex items-start gap-4">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold">
-                  {ruleIcons[index]}
-                </span>
+                <span className={iconCircleClassName}>{ruleIcons[index]}</span>
                 <span className="pt-1.5 font-sans text-sm font-medium text-foreground">
                   {renderRuleText(rule, index, photoGallery.driveFolderUploadUrl)}
                 </span>
