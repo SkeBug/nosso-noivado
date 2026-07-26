@@ -5,7 +5,7 @@ export const eventConfig = {
     initials: "E&E",
   },
   message:
-    "Com o coração cheio de alegria, convidamos você a celebrar connosco o início de mais um capítulo da nossa história de amor.", // TODO: couple free to edit/replace this text
+    "O amor se torna ainda mais bonito quando é vivido ao lado de pessoas especiais. Por isso, escolhemos vocês para fazerem parte de um dos dias mais importantes das nossas vidas.",
   invitation: {
     blessing: "Com o coração cheio de alegria e sob as bênçãos de Deus",
     honor: "têm a honra de convidar",
