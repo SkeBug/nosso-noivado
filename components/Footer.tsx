@@ -10,8 +10,8 @@ export default function Footer() {
   return (
     <footer className="px-6 py-10 text-center">
       <FadeIn mode="scroll">
-        <Pulse className="text-gold">
-          <Monogram size={40} className="mx-auto" />
+        <Pulse>
+          <Monogram size={40} variant="gold" className="mx-auto" />
         </Pulse>
         <p className="mt-3 font-display text-lg italic text-foreground">
           Com amor, {firstNameA} &amp; {firstNameB}
