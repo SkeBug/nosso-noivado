@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Camera, Upload } from "lucide-react";
+import { Camera, ChevronDown, Loader2, Upload } from "lucide-react";
 import { eventConfig } from "@/config/event";
 import { useCountdown } from "./hooks/useCountdown";
 import CountdownDigits from "./ui/CountdownDigits";
@@ -20,7 +20,7 @@ function photoSrc(fileId: string, size: number) {
 // Stand-in photos for ?preview=1 when the real Drive folder has nothing in it yet
 // (expected before the event) — lets the couple see the finished gallery layout
 // and lightbox now instead of waiting for guest uploads.
-const SAMPLE_PHOTOS: DriveFile[] = Array.from({ length: 8 }, (_, index) => ({
+const SAMPLE_PHOTOS: DriveFile[] = Array.from({ length: 16 }, (_, index) => ({
   id: `preview-${index + 1}`,
   name: `Foto de exemplo ${index + 1}`,
 }));
@@ -53,6 +53,26 @@ function resolveForcedState(previewMode: string | null): ForcedGalleryState | nu
 const SIMULATED_ERROR_MESSAGE =
   "Não foi possível carregar as fotos agora. Tenta novamente mais tarde.";
 
+// Metadata for every photo is fetched in one cheap request (id+name only, no
+// image bytes), but only a growing slice of it is ever rendered — "Carregar Mais
+// Fotos" reveals the next batch, 4 at a time (both the first load and every
+// subsequent click).
+const PAGE_SIZE = 4;
+const LOAD_MORE_DELAY_MS = 500; // purely for perceptible feedback — the batch is already in memory
+
+function resolveGalleryData(
+  forcedState: ForcedGalleryState | null,
+  usingSamplePhotos: boolean,
+  files: DriveFile[] | null,
+  error: string | null,
+): { fullList: DriveFile[] | null; displayError: string | null } {
+  if (forcedState === "vazio") return { fullList: [], displayError: null };
+  if (forcedState === "carregando") return { fullList: null, displayError: null };
+  if (forcedState === "erro") return { fullList: null, displayError: SIMULATED_ERROR_MESSAGE };
+  if (usingSamplePhotos) return { fullList: SAMPLE_PHOTOS, displayError: null };
+  return { fullList: files, displayError: error };
+}
+
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -75,6 +95,8 @@ export default function PhotoGallery() {
     isConfigured ? null : "A galeria de fotos ainda não foi configurada.",
   );
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   useEffect(() => {
     if (!isConfigured || !isComplete) return;
@@ -96,6 +118,7 @@ export default function PhotoGallery() {
       .then((data: { files?: DriveFile[] }) => {
         if (cancelled) return;
         setFiles(data.files ?? []);
+        setVisibleCount(PAGE_SIZE); // a fresh fetch always starts back at the first page
       })
       .catch(() => {
         if (cancelled) return;
@@ -116,43 +139,41 @@ export default function PhotoGallery() {
     isPreview && !forcedState && (Boolean(error) || files?.length === 0);
   const usingSamplePhotos = forcedState === "fotos" || usingSampleFallback;
 
-  let displayFiles: DriveFile[] | null;
-  let displayError: string | null;
+  const { fullList, displayError } = resolveGalleryData(
+    forcedState,
+    usingSamplePhotos,
+    files,
+    error,
+  );
 
-  if (forcedState === "vazio") {
-    displayFiles = [];
-    displayError = null;
-  } else if (forcedState === "carregando") {
-    displayFiles = null;
-    displayError = null;
-  } else if (forcedState === "erro") {
-    displayFiles = null;
-    displayError = SIMULATED_ERROR_MESSAGE;
-  } else if (usingSamplePhotos) {
-    displayFiles = SAMPLE_PHOTOS;
-    displayError = null;
-  } else {
-    displayFiles = files;
-    displayError = error;
-  }
+  const displayFiles = fullList ? fullList.slice(0, visibleCount) : fullList;
+  const hasMore = fullList !== null && fullList.length > visibleCount;
 
   const displaySrc = usingSamplePhotos ? samplePhotoSrc : photoSrc;
 
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const handleLoadMore = useCallback(() => {
+    setIsLoadingMore(true);
+    window.setTimeout(() => {
+      setVisibleCount((count) => count + PAGE_SIZE);
+      setIsLoadingMore(false);
+    }, LOAD_MORE_DELAY_MS);
+  }, [setIsLoadingMore, setVisibleCount]);
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), [setLightboxIndex]);
 
   const showPrev = useCallback(() => {
     setLightboxIndex((current) => {
       if (current === null || !displayFiles || displayFiles.length === 0) return current;
       return (current - 1 + displayFiles.length) % displayFiles.length;
     });
-  }, [displayFiles]);
+  }, [displayFiles, setLightboxIndex]);
 
   const showNext = useCallback(() => {
     setLightboxIndex((current) => {
       if (current === null || !displayFiles || displayFiles.length === 0) return current;
       return (current + 1) % displayFiles.length;
     });
-  }, [displayFiles]);
+  }, [displayFiles, setLightboxIndex]);
 
   useEffect(() => {
     if (lightboxIndex === null) return;
@@ -237,16 +258,36 @@ export default function PhotoGallery() {
                 )}
               </div>
 
-              {hasUploadUrl && (
-                <a
-                  href={photoGallery.driveFolderUploadUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-8 inline-flex items-center gap-2 rounded-full border border-gold/50 px-6 py-3 font-sans text-xs uppercase tracking-[0.15em] text-foreground transition-colors hover:border-gold hover:bg-gold/10"
-                >
-                  <Upload size={16} className="text-gold" />
-                  Enviar as Tuas Fotos
-                </a>
+              {(hasMore || hasUploadUrl) && (
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                  {hasMore && (
+                    <button
+                      type="button"
+                      onClick={handleLoadMore}
+                      disabled={isLoadingMore}
+                      className="inline-flex items-center gap-2 rounded-full border border-gold/50 px-6 py-3 font-sans text-xs uppercase tracking-[0.15em] text-foreground transition-colors hover:border-gold hover:bg-gold/10 disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {isLoadingMore ? (
+                        <Loader2 size={16} className="animate-spin text-gold" aria-hidden="true" />
+                      ) : (
+                        <ChevronDown size={16} className="text-gold" aria-hidden="true" />
+                      )}
+                      {isLoadingMore ? "A carregar…" : "Carregar Mais Fotos"}
+                    </button>
+                  )}
+
+                  {hasUploadUrl && (
+                    <a
+                      href={photoGallery.driveFolderUploadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-foreground shadow-sm transition-colors hover:bg-gold/90"
+                    >
+                      <Upload size={16} className="text-foreground" />
+                      Enviar as Tuas Fotos
+                    </a>
+                  )}
+                </div>
               )}
             </>
           )}

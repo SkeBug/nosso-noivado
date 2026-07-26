@@ -14,7 +14,7 @@ export default function Footer() {
           <Monogram size={40} variant="gold" className="mx-auto" />
         </Pulse>
         <p className="mt-3 font-display text-lg italic text-foreground">
-          Com amor, {firstNameA} &amp; {firstNameB}
+          Com amor, {firstNameA} <span className="not-italic">&amp;</span> {firstNameB}
         </p>
         <p className="mt-2 font-sans text-xs text-olive">
           © {new Date().getFullYear()}

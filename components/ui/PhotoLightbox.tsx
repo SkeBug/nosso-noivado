@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Loader2, X } from "lucide-react";
 
 type PhotoLightboxProps = {
   src: string;
@@ -22,6 +22,16 @@ export default function PhotoLightbox({
 }: Readonly<PhotoLightboxProps>) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const touchStartX = useRef<number | null>(null);
+
+  // Reset the loading state whenever `src` changes (next/prev/new photo opened).
+  // Done during render, not in an effect, so the spinner shows on the very same
+  // paint as the click — no extra round trip before the user sees feedback.
+  const [prevSrc, setPrevSrc] = useState(src);
+  const [isLoading, setIsLoading] = useState(true);
+  if (src !== prevSrc) {
+    setPrevSrc(src);
+    setIsLoading(true);
+  }
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -92,9 +102,25 @@ export default function PhotoLightbox({
           <ChevronRight size={22} />
         </button>
 
+        {isLoading && (
+          <div className="absolute inset-0 z-0 flex items-center justify-center" aria-hidden="true">
+            <div className="flex items-center justify-center rounded-full bg-foreground/70 p-4">
+              <Loader2 size={28} className="animate-spin text-background" />
+            </div>
+          </div>
+        )}
+
         {/* Drive thumbnail hosts vary, so a plain img avoids next/image remote-pattern mismatches */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className="max-h-full max-w-full object-contain" />
+        <img
+          src={src}
+          alt={alt}
+          onLoad={() => setIsLoading(false)}
+          onError={() => setIsLoading(false)}
+          className={`relative z-1 max-h-full max-w-full object-contain transition-opacity duration-200 ${
+            isLoading ? "opacity-0" : "opacity-100"
+          }`}
+        />
       </div>
     </dialog>
   );
