@@ -16,12 +16,19 @@ const hasCoverPhoto = fs.existsSync(coverPhotoPath);
 
 type HeroProps = {
   guestName?: string;
+  guestPlural?: boolean;
 };
 
-export default function Hero({ guestName }: Readonly<HeroProps>) {
+export default function Hero({
+  guestName,
+  guestPlural = false,
+}: Readonly<HeroProps>) {
   const { couple, date, invitation } = eventConfig;
   const firstNameA = couple.nameA.split(" ")[0];
   const firstNameB = couple.nameB.split(" ")[0];
+  const celebration = guestPlural
+    ? invitation.celebration.plural
+    : invitation.celebration.singular;
 
   return (
     <section className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
@@ -74,7 +81,7 @@ export default function Hero({ guestName }: Readonly<HeroProps>) {
 
       <FadeIn delay={0.8} className="drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
         <p className="mt-5 font-display text-lg text-background/95 sm:text-xl">
-          {invitation.celebration}
+          {celebration}
         </p>
       </FadeIn>
 

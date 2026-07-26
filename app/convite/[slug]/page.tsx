@@ -40,5 +40,5 @@ export default async function GuestInvitePage({
     redirect("/");
   }
 
-  return <InvitationPage guestName={guest.displayName} />;
+  return <InvitationPage guestName={guest.displayName} guestPlural={guest.plural} />;
 }

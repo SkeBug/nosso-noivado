@@ -4,12 +4,21 @@ export const eventConfig = {
     nameB: "Evandro Silva",
     initials: "E&E",
   },
-  message:
-    "O amor se torna ainda mais bonito quando é vivido ao lado de pessoas especiais. Por isso, escolhemos vocês para fazerem parte de um dos dias mais importantes das nossas vidas.",
+  // Text below has singular/plural pairs — picked at render time based on whether
+  // the guest link addresses one person (`você`) or more than one (`vocês`).
+  message: {
+    singular:
+      "O amor se torna ainda mais bonito quando é vivido ao lado de pessoas especiais. Por isso, escolhemos você para fazer parte de um dos dias mais importantes das nossas vidas.",
+    plural:
+      "O amor se torna ainda mais bonito quando é vivido ao lado de pessoas especiais. Por isso, escolhemos vocês para fazerem parte de um dos dias mais importantes das nossas vidas.",
+  },
   invitation: {
     blessing: "Com o coração cheio de alegria e sob as bênçãos de Deus",
-    honor: "têm a honra de convidar",
-    celebration: "para celebrarem connosco o nosso noivado",
+    honor: "têm a honra de convidar", // refers to the couple, not the guest — always plural
+    celebration: {
+      singular: "para celebrar connosco o nosso noivado",
+      plural: "para celebrarem connosco o nosso noivado",
+    },
     genericGuestLabel: "Convidado(a) Especial", // shown in place of a personalized guest name on the generic (non-slug) invite
   },
   date: {
