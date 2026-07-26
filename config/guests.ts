@@ -4,5 +4,6 @@ export const guests = [
   { slug: "sandro-e-carina", displayName: "Sandro & Carina", plural: true },
   { slug: "nelson-e-indira", displayName: "Nelson & Indira", plural: true },
   { slug: "emanuel-silva", displayName: "Emanuel Silva", plural: false },
+  { slug: "jorge-e-rita", displayName: "Jorge & Rita", plural: true },
   // TODO: add all guests here
 ] as const;
