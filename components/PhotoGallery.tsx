@@ -142,7 +142,8 @@ export default function PhotoGallery() {
           {!isComplete ? (
             <>
               <p className="mt-4 font-sans text-sm text-foreground/70">
-                Aqui ficarão as fotos do nosso grande dia.
+                Aqui ficarão as fotos do nosso grande dia — vais poder enviar as
+                tuas fotos e também baixar as fotos de outros convidados, tudo a partir daqui deste mesmo site.
               </p>
               <p className="mt-6 font-sans text-xs uppercase tracking-[0.25em] text-olive">
                 Estamos em contagem decrescente
