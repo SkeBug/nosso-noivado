@@ -169,11 +169,22 @@ export default function PhotoGallery() {
   }, [displayFiles, setLightboxIndex]);
 
   const showNext = useCallback(() => {
-    setLightboxIndex((current) => {
-      if (current === null || !displayFiles || displayFiles.length === 0) return current;
-      return (current + 1) % displayFiles.length;
-    });
-  }, [displayFiles, setLightboxIndex]);
+    if (lightboxIndex === null || !displayFiles || displayFiles.length === 0) return;
+
+    const atEnd = lightboxIndex === displayFiles.length - 1;
+    if (atEnd && hasMore) {
+      // Reveal the next batch (same as clicking "Carregar Mais Fotos") so the
+      // guest can keep browsing forward instead of wrapping back to photo 1.
+      // Both setters are called directly (not nested in each other's updater)
+      // so Strict Mode's double-invocation of functional updaters can't
+      // double-apply this as a side effect.
+      setVisibleCount((count) => count + PAGE_SIZE);
+      setLightboxIndex(lightboxIndex + 1);
+      return;
+    }
+
+    setLightboxIndex((lightboxIndex + 1) % displayFiles.length);
+  }, [displayFiles, hasMore, lightboxIndex, setLightboxIndex, setVisibleCount]);
 
   useEffect(() => {
     if (lightboxIndex === null) return;
