@@ -149,5 +149,5 @@ export const guests = [
   { slug: "rui-neto", displayName: "Rui Neto", plural: false },
   { slug: "horacio-mulaza-e-esposa", displayName: "Horácio Mulaza & Esposa", plural: true },
   { slug: "jorge-goncalves", displayName: "Jorge Gonçalves", plural: false },
-  { slug: "edson-tomas-e-esposa", displayName: "Edson Tomás & Esposa", plural: true },
+  { slug: "hubbem-da-silva-e-esposa", displayName: "Hubbem da Silva & Esposa", plural: true },
 ] as const;
