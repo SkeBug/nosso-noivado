@@ -87,6 +87,8 @@ export const guests = [
   { slug: "auria-mateus", displayName: "Auria Mateus", plural: false },
   { slug: "adriana-joao", displayName: "Adriana João", plural: false },
   { slug: "miguel-benza", displayName: "Miguel Benza", plural: false },
+  { slug: "maki-e-esposo", displayName: "Maki & Esposo", plural: true },
+  { slug: "joyce-charlene", displayName: "Joyce Charlene", plural: false },
 
   /*--------------------------------------------HE--------------------------------------------*/
   // Mamoite - Irmãos
