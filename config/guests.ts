@@ -111,7 +111,7 @@ export const guests = [
   { slug: "edmilson-da-costa-e-esposa", displayName: "Edmilson da Costa & Esposa", plural: true },
   { slug: "branca-da-costa", displayName: "Branca da Costa", plural: false },
   { slug: "ariclenes-da-costa-e-esposa", displayName: "Ariclenes da Costa & Esposa", plural: true },
-  { slug: "andelson-agostinho", displayName: "Andelson Agostinho", plural: false },
+  { slug: "anderson-agostinho", displayName: "Anderson Agostinho", plural: false },
   { slug: "ketsia-marilda", displayName: "Ketsia Marilda", plural: false },
   { slug: "benilde-gamboa-e-esposo", displayName: "Benilde Gâmboa & Esposo", plural: true },
   { slug: "jorge-e-rita", displayName: "Jorge & Rita", plural: true },
