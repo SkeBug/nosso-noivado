@@ -99,7 +99,7 @@ export const guests = [
 
   // Mamoite - Primos
   { slug: "samuel-figueiredo-e-esposa", displayName: "Samuel Figueiredo & Esposa", plural: true },
-  { slug: "xaxa", displayName: "Xaxa", plural: false }, // TODO: Replace placeholder when name is known
+  { slug: "sebastiao-figueiredo-e-esposa", displayName: "Sebastião Figueiredo & Esposa", plural: true },
   { slug: "samuel-machado-e-esposa", displayName: "Samuel Machado & Esposa", plural: true },
   { slug: "margarida-lelo-e-esposo", displayName: "Margarida Lelo & Esposo", plural: true },
   { slug: "maria-lelo-e-esposo", displayName: "Maria Lelo & Esposo", plural: true },
