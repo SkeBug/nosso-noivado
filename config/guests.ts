@@ -144,7 +144,7 @@ export const guests = [
   { slug: "nelson-e-indira", displayName: "Nelson & Indira", plural: true },
   { slug: "martino-ivaba-e-noiva", displayName: "Martino Ivaba & Noiva", plural: true },
   { slug: "emanuel-jorge", displayName: "Emanuel Jorge", plural: false },
-  { slug: "rufino-domingos", displayName: "Rufino Domingos", plural: false },
+  { slug: "rufino-domingos-e-esposa", displayName: "Rufino Domingos & Esposa", plural: true },
   { slug: "hilquias-chitazo", displayName: "Hilquias Chitazo", plural: false },
   { slug: "rui-neto", displayName: "Rui Neto", plural: false },
   { slug: "horacio-mulaza-e-esposa", displayName: "Horácio Mulaza & Esposa", plural: true },
