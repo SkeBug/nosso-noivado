@@ -89,6 +89,7 @@ export const guests = [
   { slug: "miguel-benza", displayName: "Miguel Benza", plural: false },
   { slug: "maki-e-esposo", displayName: "Maki & Esposo", plural: true },
   { slug: "joyce-charlene", displayName: "Joyce Charlene", plural: false },
+  { slug: "yuran-e-esposa", displayName: "Yuran & Esposa", plural: true },
 
   /*--------------------------------------------HE--------------------------------------------*/
   // Mamoite - Irmãos
@@ -133,6 +134,7 @@ export const guests = [
   { slug: "matias-e-esposa", displayName: "Matias & Wife", plural: true },
   { slug: "rosa-morgado-e-esposo", displayName: "Rosa Morgado & Esposo", plural: true },
   { slug: "jorge-silva-e-esposa", displayName: "Jorge Silva & Esposa", plural: true },
+  { slug: "osvaldo-silva-e-esposa", displayName: "Osvaldo Silva & Esposa", plural: true },
 
   // TODO: Replace placeholders when names are known
   { slug: "convidado-papoite-1", displayName: "X", plural: false },
@@ -150,6 +152,5 @@ export const guests = [
   { slug: "hilquias-chitazo", displayName: "Hilquias Chitazo", plural: false },
   { slug: "rui-neto", displayName: "Rui Neto", plural: false },
   { slug: "horacio-mulaza-e-esposa", displayName: "Horácio Mulaza & Esposa", plural: true },
-  { slug: "jorge-goncalves", displayName: "Jorge Gonçalves", plural: false },
-  { slug: "hubbem-da-silva-e-esposa", displayName: "Hubbem da Silva & Esposa", plural: true },
+  { slug: "jorge-goncalves", displayName: "Jorge Gonçalves", plural: false }, 
 ] as const;
