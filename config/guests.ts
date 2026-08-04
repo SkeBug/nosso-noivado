@@ -93,6 +93,7 @@ export const guests = [
 
   /*--------------------------------------------HE--------------------------------------------*/
   // Mamoite - Irmãos
+  { slug: "margarida-agostinho", displayName: "Margarida Agostinho", plural: false },
   { slug: "agostinho-neto", displayName: "Agostinho Neto", plural: false },
   { slug: "maria-agostinho", displayName: "Maria Agostinho", plural: false },
   { slug: "ludovina-agostinho", displayName: "Ludovina Agostinho", plural: false },
