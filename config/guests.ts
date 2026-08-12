@@ -93,6 +93,7 @@ export const guests = [
   { slug: "aloisio", displayName: "Aloísio", plural: false },
   { slug: "alberto", displayName: "Alberto", plural: false },
   { slug: "rilo", displayName: "Rilo", plural: false },
+  { slug: "nany-e-esposa", displayName: "Nany e Esposa", plural: false },
 
   /*--------------------------------------------HE--------------------------------------------*/
   // Mamoite - Irmãos
