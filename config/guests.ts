@@ -119,7 +119,6 @@ export const guests = [
   { slug: "edmilson-da-costa-e-esposa", displayName: "Edmilson da Costa & Esposa", plural: true },
   { slug: "branca-da-costa", displayName: "Branca da Costa", plural: false },
   { slug: "ariclenes-da-costa-e-esposa", displayName: "Ariclenes da Costa & Esposa", plural: true },
-  { slug: "anderson-agostinho", displayName: "Anderson Agostinho", plural: false },
   { slug: "ketsia-marilda", displayName: "Ketsia Marilda", plural: false },
   { slug: "benilde-gamboa-e-esposo", displayName: "Benilde Gâmboa & Esposo", plural: true },
   { slug: "jorge-e-rita", displayName: "Jorge & Rita", plural: true },
@@ -133,19 +132,16 @@ export const guests = [
   { slug: "mario-giovani", displayName: "Mário Giovani", plural: false },
 
   // Papoite
-  { slug: "tony-e-esposa", displayName: "Tony & Wife", plural: true },
-  { slug: "manuela", displayName: "Manuela", plural: false },
-  { slug: "sonia", displayName: "Sonia", plural: false },
-  { slug: "matias-e-esposa", displayName: "Matias & Wife", plural: true },
+  { slug: "tony-silva-e-esposa", displayName: "Tony Silva & Esposa", plural: true },
+  { slug: "tia-manuela-e-esposo", displayName: "Tia Manuela & Esposo", plural: true },
+  { slug: "tia-sonia-e-avo-chiminha", displayName: "Tia Sônia & Avó Chiminha", plural: true },
+  { slug: "tia-mena-e-esposo", displayName: "Tia Mena & Esposo", plural: true },
+  { slug: "tia-ju-e-esposo", displayName: "Tia Jú & Esposo", plural: true },
+  { slug: "matias-e-esposa", displayName: "Matias & Esposa", plural: true },
   { slug: "rosa-morgado-e-esposo", displayName: "Rosa Morgado & Esposo", plural: true },
   { slug: "jorge-silva-e-esposa", displayName: "Jorge Silva & Esposa", plural: true },
   { slug: "osvaldo-silva-e-esposa", displayName: "Osvaldo Silva & Esposa", plural: true },
-
-  // TODO: Replace placeholders when names are known
-  { slug: "convidado-papoite-1", displayName: "X", plural: false },
-  { slug: "convidado-papoite-2", displayName: "X", plural: false },
-  { slug: "convidado-papoite-3", displayName: "X", plural: false },
-  { slug: "convidado-papoite-4", displayName: "X", plural: false },
+  { slug: "elton-e-elisa", displayName: "Elton & Elisa", plural: true },
 
   // Me
   { slug: "gilberto-felix", displayName: "Gilberto Félix", plural: false },
